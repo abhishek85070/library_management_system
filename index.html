@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Library Management System with descriptive analytics dashboard." />
+  <title>Library Management System | Descriptive Analytics</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">📚</div>
+        <div><strong>LibraDesk</strong><small>Library workspace</small></div>
+      </div>
+      <nav class="nav-menu" aria-label="Main navigation">
+        <button class="nav-link active" data-page="dashboard"><span>▦</span> Dashboard</button>
+        <button class="nav-link" data-page="books"><span>▤</span> Books</button>
+        <button class="nav-link" data-page="students"><span>♙</span> Students</button>
+        <button class="nav-link" data-page="transactions"><span>⇄</span> Issue & Return</button>
+        <button class="nav-link" data-page="analytics"><span>◔</span> Analytics</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-note"><span class="note-icon">✦</span><div><b>Descriptive Analytics</b><p>Turn library activity into clear insights.</p></div></div>
+        <button class="nav-link" id="resetDemo"><span>↻</span> Reset demo data</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Toggle menu">☰</button>
+        <div class="breadcrumb"><span>Workspace</span><b>/</b><strong id="pageHeading">Dashboard</strong></div>
+        <div class="topbar-right">
+          <span class="status-dot"></span><span class="online-label">Local demo</span>
+          <div class="avatar">LB</div>
+        </div>
+      </header>
+
+      <section class="page active" id="page-dashboard">
+        <div class="page-intro">
+          <div><p class="eyebrow">LIBRARY OVERVIEW</p><h1>Good day, Librarian <span>✦</span></h1><p class="muted">Here’s what’s happening in your library today.</p></div>
+          <button class="btn btn-primary" data-go="books">＋ Add a book</button>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Total books</span><span class="stat-icon purple">▤</span></div><div class="stat-value" id="statTotalBooks">0</div><div class="stat-foot"><span class="tiny-dot purple-dot"></span> Titles in your collection</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Available books</span><span class="stat-icon green">✓</span></div><div class="stat-value" id="statAvailable">0</div><div class="stat-foot"><span class="tiny-dot green-dot"></span> Ready to be borrowed</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Books issued</span><span class="stat-icon orange">⇄</span></div><div class="stat-value" id="statIssued">0</div><div class="stat-foot"><span class="tiny-dot orange-dot"></span> Currently with readers</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Total students</span><span class="stat-icon blue">♙</span></div><div class="stat-value" id="statStudents">0</div><div class="stat-foot"><span class="tiny-dot blue-dot"></span> Registered readers</div></article>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="panel chart-panel">
+            <div class="panel-heading"><div><h2>Books by category</h2><p class="muted">Collection breakdown</p></div><span class="panel-tag">OVERVIEW</span></div>
+            <div class="chart-wrap"><canvas id="categoryChart" aria-label="Books by category chart"></canvas><div id="categoryLegend" class="legend"></div></div>
+          </article>
+          <article class="panel chart-panel">
+            <div class="panel-heading"><div><h2>Issue activity</h2><p class="muted">Current transaction status</p></div><span class="panel-tag">STATUS</span></div>
+            <div class="chart-wrap"><canvas id="statusChart" aria-label="Issue status chart"></canvas><div id="statusLegend" class="legend"></div></div>
+          </article>
+          <article class="panel table-panel">
+            <div class="panel-heading"><div><h2>Recently issued</h2><p class="muted">Latest book transactions</p></div><button class="text-btn" data-go="transactions">View all →</button></div>
+            <div class="table-scroll"><table><thead><tr><th>Book</th><th>Student</th><th>Issue date</th><th>Status</th></tr></thead><tbody id="recentTransactions"></tbody></table></div>
+          </article>
+          <article class="panel popular-panel">
+            <div class="panel-heading"><div><h2>Popular books</h2><p class="muted">Most borrowed titles</p></div><span class="medal">🏆</span></div>
+            <div id="popularBooks" class="popular-list"></div>
+          </article>
+        </div>
+        <p class="footer-note">📊 Descriptive analytics summarizes past and current library data. Demo data is saved in this browser.</p>
+      </section>
+
+      <section class="page" id="page-books">
+        <div class="page-intro"><div><p class="eyebrow">COLLECTION</p><h1>Books</h1><p class="muted">Manage titles, categories, and availability.</p></div><button class="btn btn-primary" id="addBookBtn">＋ Add a book</button></div>
+        <div class="toolbar"><div class="search-box"><span>⌕</span><input id="bookSearch" type="search" placeholder="Search by title, author, ISBN..." /></div><select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option></select><span class="result-count" id="bookCount"></span></div>
+        <article class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Book details</th><th>ISBN</th><th>Category</th><th>Copies</th><th>Available</th><th>Actions</th></tr></thead><tbody id="booksTable"></tbody></table></div></article>
+      </section>
+
+      <section class="page" id="page-students">
+        <div class="page-intro"><div><p class="eyebrow">READERS</p><h1>Students</h1><p class="muted">Keep student records organized.</p></div><button class="btn btn-primary" id="addStudentBtn">＋ Add student</button></div>
+        <div class="toolbar"><div class="search-box"><span>⌕</span><input id="studentSearch" type="search" placeholder="Search name, email, or student ID..." /></div><span class="result-count" id="studentCount"></span></div>
+        <article class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Student</th><th>Student ID</th><th>Email</th><th>Books currently issued</th><th>Actions</th></tr></thead><tbody id="studentsTable"></tbody></table></div></article>
+      </section>
+
+      <section class="page" id="page-transactions">
+        <div class="page-intro"><div><p class="eyebrow">CIRCULATION</p><h1>Issue & Return</h1><p class="muted">Track which books are borrowed and returned.</p></div><button class="btn btn-primary" id="issueBookBtn">＋ Issue a book</button></div>
+        <div class="stats-grid compact-stats"><article class="stat-card"><div class="stat-top"><span>Total transactions</span><span class="stat-icon purple">⇄</span></div><div class="stat-value" id="txTotal">0</div></article><article class="stat-card"><div class="stat-top"><span>Active issues</span><span class="stat-icon orange">◷</span></div><div class="stat-value" id="txActive">0</div></article><article class="stat-card"><div class="stat-top"><span>Returned</span><span class="stat-icon green">✓</span></div><div class="stat-value" id="txReturned">0</div></article></div>
+        <div class="toolbar"><div class="search-box"><span>⌕</span><input id="transactionSearch" type="search" placeholder="Search book or student..." /></div><select id="transactionFilter" aria-label="Filter transactions"><option value="">All transactions</option><option value="Issued">Issued</option><option value="Returned">Returned</option></select></div>
+        <article class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Book</th><th>Student</th><th>Issue date</th><th>Due date</th><th>Return date</th><th>Status / action</th></tr></thead><tbody id="transactionsTable"></tbody></table></div></article>
+      </section>
+
+      <section class="page" id="page-analytics">
+        <div class="page-intro"><div><p class="eyebrow">DESCRIPTIVE ANALYTICS</p><h1>Library insights</h1><p class="muted">Understand the collection and borrowing patterns using summaries and charts.</p></div><button class="btn btn-secondary" id="exportDataBtn">↓ Export data (CSV)</button></div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Collection size</span><span class="stat-icon purple">▤</span></div><div class="stat-value" id="analyticsCopies">0</div><div class="stat-foot">Total physical copies</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Availability rate</span><span class="stat-icon green">◔</span></div><div class="stat-value" id="availabilityRate">0%</div><div class="stat-foot">Available copies ÷ total copies</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Return rate</span><span class="stat-icon blue">↩</span></div><div class="stat-value" id="returnRate">0%</div><div class="stat-foot">Returned ÷ all transactions</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Borrowing records</span><span class="stat-icon orange">⇄</span></div><div class="stat-value" id="analyticsTransactions">0</div><div class="stat-foot">All issue records, including returns</div></article>
+        </div>
+        <div class="dashboard-grid analytics-grid">
+          <article class="panel chart-panel"><div class="panel-heading"><div><h2>Category-wise collection</h2><p class="muted">Number of book copies by category</p></div></div><div class="large-chart"><canvas id="analyticsCategoryChart"></canvas></div></article>
+          <article class="panel chart-panel"><div class="panel-heading"><div><h2>Borrowing status</h2><p class="muted">Issued versus returned transactions</p></div></div><div class="large-chart"><canvas id="analyticsStatusChart"></canvas></div></article>
+          <article class="panel table-panel"><div class="panel-heading"><div><h2>Most borrowed books</h2><p class="muted">Ranked by issue count</p></div></div><div class="table-scroll"><table><thead><tr><th>Rank</th><th>Book</th><th>Category</th><th>Times borrowed</th></tr></thead><tbody id="popularTable"></tbody></table></div></article>
+          <article class="panel insight-panel"><div class="panel-heading"><div><h2>Quick observations</h2><p class="muted">Automatically calculated from your data</p></div><span class="stat-icon purple">✦</span></div><div id="insightsList" class="insights-list"></div></article>
+        </div>
+        <p class="footer-note">Note: Analytics reflect the records currently stored in this browser. Add realistic project data for your classroom demonstration.</p>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-heading"><div><p class="eyebrow">LIBRARY WORKSPACE</p><h2 id="modalTitle">Add record</h2></div><button class="close-btn" id="closeModal" aria-label="Close">×</button></div>
+      <form id="modalForm"><div id="modalFields" class="form-grid"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" id="cancelModal">Cancel</button><button type="submit" class="btn btn-primary" id="saveModal">Save record</button></div></form>
+    </section>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
